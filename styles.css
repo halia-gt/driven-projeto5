@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+@media (max-width: 614px) {
+    
+    body {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        background-color: #F3F3F3;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    header, footer {
+        width: 100%;
+        height: 80px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        left: 0;
+        padding: 0 22px;
+        background-color: #FFFFFF;
+    }
+
+    header {
+        top: 0;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    header img {
+        width: 75px;
+    }
+
+    header ion-icon {
+        font-size: 45px;
+    }
+
+    main {
+        margin-top: 80px;
+        margin-bottom: 80px;
+    }
+
+    footer {
+        bottom: 0;
+        padding-left: 0;
+        box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    footer input {
+        border: none;
+        height: 100%;
+        width: 100%;
+        padding-left: 17px;
+        font-style: italic;
+        font-size: 18px;
+    }
+
+    footer input::placeholder {
+        color: #000000;
+    }
+
+    footer ion-icon {
+        font-size: 26px;
+    }
+}
+
