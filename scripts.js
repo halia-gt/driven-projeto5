@@ -55,7 +55,7 @@ function displayMessages() {
                 `
                 break;
         }
-        if (message.type === 'message' || message.type === 'Todos' || (message.type === 'private_message' && message.to === username)) {
+        if (message.type === 'message' || message.type === 'status' || (message.type === 'private_message' && message.to === username)) {
             main.innerHTML += messageTemplate;
         }
     }
@@ -69,7 +69,7 @@ function displayUsers() {
 
     for ( let i = 0 ; i < serverUsers.length ; i++ ) {
         const userTemplate = `
-            <li>
+            <li class="user">
                 <ion-icon name="person-circle"></ion-icon>
                 <span>${serverUsers[i].name}</span>
                 <img src="./images/vector.png">
@@ -94,7 +94,7 @@ function getUsername() {
 
 function wrongUsername(error) {
     const errorMessage = document.querySelector('.enter-screen p');
-    errorMessage.innerHTML = 'Usuário já existente, digite outro nome.';
+    errorMessage.innerHTML = 'Usuário inválido, digite outro nome.';
 }
 
 function enterRoom() {
@@ -114,6 +114,38 @@ function abilityClicks() {
 function openModal() {
     const modal = document.querySelector('.modal');
     modal.classList.remove('hidden');
+
+    abilityClicksModal();
+}
+
+function abilityClicksModal() {
+    const users = document.querySelectorAll('.user');
+    users.forEach(user => {user.addEventListener('click', selectUser)});
+
+    const type = document.querySelectorAll('.type');
+    type.forEach(user => {user.addEventListener('click', selectType)});
+
+    const modal = document.querySelector('.modal');
+    modal.addEventListener('click', closeModal);
+}
+
+function selectUser() {
+    const previousCheckmark = document.querySelector('.user img.checkmark-green');
+    previousCheckmark.classList.remove('checkmark-green');
+    const checkmark = this.querySelector('img');
+    checkmark.classList.add('checkmark-green');
+}
+
+function selectType() {
+    const previousCheckmark = document.querySelector('.type img.checkmark-green');
+    previousCheckmark.classList.remove('checkmark-green');
+    const checkmark = this.querySelector('img');
+    checkmark.classList.add('checkmark-green');
+}
+
+function closeModal() {
+    const modal = document.querySelector('.modal');
+    modal.classList.add('hidden');
 }
 
 document.querySelector('.enter-screen button').addEventListener('click', getUsername);
