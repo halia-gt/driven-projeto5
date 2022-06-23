@@ -77,11 +77,13 @@ footer {
 }
 
 footer input {
+    font-family: 'Roboto', sans-serif;
     border: none;
     height: 100%;
     width: 100%;
     padding-left: 17px;
     font-size: 18px;
+    resize: none;
 }
 
 footer input::placeholder {
@@ -118,12 +120,15 @@ footer ion-icon {
 }
 
 .enter-screen input {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
     width: 85%;
     height: 54px;
     background: #FFFFFF;
     border: 1px solid #D7D7D7;
     border-radius: 4px;
     margin-bottom: 15px;
+    text-align: center;
 }
 
 .enter-screen input::placeholder {
@@ -133,8 +138,8 @@ footer ion-icon {
 }
 
 .enter-screen input:focus {
-    border: none;
     outline: none;
+    text-align: center;
 }
 
 .enter-screen button {
@@ -146,6 +151,12 @@ footer ion-icon {
     text-align: center;
     font-size: 18px;
     color: #696969;
+}
+
+.enter-screen p {
+    color: red;
+    font-size: 15px;
+    margin-top: 15px;
 }
 
 /* ---------------------------------------------------------- TENTAR FAZER TRANSIÇÃO DA DIREITA PRA ESQUERDA ---------------------------------------------------------- */

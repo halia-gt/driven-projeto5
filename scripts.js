@@ -1,15 +1,20 @@
 let serverMessages = [];
+let username;
 
-const promise = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
-promise.then(getMessages);
 
-function getMessages(answer) {
+function getMessages() {
+    const promise = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
+    promise.then(createArrayMessages);
+}
+
+function createArrayMessages(answer) {
     serverMessages = answer.data;
     displayMessages();
 }
 
 function displayMessages () {
     const main = document.querySelector('main');
+    main.innerHTML = '';
 
     for ( let i = 0 ; i < serverMessages.length ; i++ ) {
         const message = serverMessages[i];
@@ -40,9 +45,38 @@ function displayMessages () {
                 `
                 break;
         }
-        main.innerHTML += messageTemplate;
+        if (message.type === 'message' || message.type === 'Todos' || (message.type === 'private_message' && message.to === username)) {
+            main.innerHTML += messageTemplate;
+        }
     }
 
     lastMessage = document.querySelector('.message-container:last-child');
     lastMessage.scrollIntoView();
-}f
+}
+
+function getUsername() {
+    username = document.querySelector('.enter-screen input').value;
+
+    const userObjetct = {
+        name: username
+    }
+
+    const promise = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants', userObjetct);
+    promise.catch(wrongUsername);
+    promise.then(enterRoom);
+    
+}
+
+function wrongUsername(error) {
+    const errorMessage = document.querySelector('.enter-screen p');
+    errorMessage.innerHTML = 'Usuário já existente, digite outro nome.';
+}
+
+function enterRoom() {
+    const enterScreen = document.querySelector('.enter-screen');
+    enterScreen.classList.add('hidden');
+    abilityClicks();
+    getMessages();
+}
+
+document.querySelector('.enter-screen button').addEventListener('click', getUsername);
