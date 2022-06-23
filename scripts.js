@@ -1,6 +1,8 @@
 let serverMessages = [];
 let serverUsers = [];
-let username, ul;
+let username;
+let sendTo = 'Todos';
+let sendType = 'message';
 
 function getMessages() {
     const promise = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
@@ -65,7 +67,7 @@ function displayMessages() {
 }
 
 function displayUsers() {
-    ul = document.querySelector('.modal .modal-content ul');
+    const ul = document.querySelector('.modal .modal-content ul');
 
     for ( let i = 0 ; i < serverUsers.length ; i++ ) {
         const userTemplate = `
@@ -116,7 +118,12 @@ function abilityClicks() {
 
 function openModal() {
     const modal = document.querySelector('.modal');
+    const body = document.querySelector('body');
     modal.classList.remove('hidden');
+
+    if (!modal.classList.contains('hidden')) {
+        body.style.overflow = 'hidden';
+    }
 
     abilityClicksModal();
 }
@@ -137,6 +144,9 @@ function selectUser() {
     previousCheckmark.classList.remove('checkmark-green');
     const checkmark = this.querySelector('img');
     checkmark.classList.add('checkmark-green');
+
+    sendTo = this.querySelector('span').innerHTML;
+    changeTextarea();
 }
 
 function selectType() {
@@ -144,28 +154,60 @@ function selectType() {
     previousCheckmark.classList.remove('checkmark-green');
     const checkmark = this.querySelector('img');
     checkmark.classList.add('checkmark-green');
+
+    const visibility = this.querySelector('span').innerHTML;
+    if (visibility === 'Público') {
+        sendType = 'message';
+    } else if (visibility === 'Reservadamente') {
+        sendType = 'private_message';
+    }
+    changeTextarea();
+}
+
+function changeTextarea() {
+    const reserved = document.querySelector('.textarea-send-to p');
+
+    switch (true) {
+        case (sendType === 'message' && sendTo !== 'Todos'):
+            reserved.innerHTML = `
+                Enviando para ${sendTo} (publicamente)
+            `;
+            break;
+        
+        case (sendType === 'private_message'):
+            reserved.innerHTML = `
+                Enviando para ${sendTo} (reservadamente)
+            `
+            break;
+        default:
+            reserved.innerHTML = '';
+            
+    }
 }
 
 function closeModal() {
     const modal = document.querySelector('.modal');
+    const body = document.querySelector('body');
     modal.classList.add('hidden');
+
+    if (modal.classList.contains('hidden')) {
+        body.style.overflow = 'auto';
+    }
 }
 
-let message;
-let messageObject;
-
 function sendMessage() {
-    message = document.querySelector('footer input').value;
+    let message = document.querySelector('footer textarea').value;
 
-    messageObject = {
+    let messageObject = {
         from: username,
-        to: 'Todos',
+        to: sendTo,
         text: message,
-        type: 'message'
+        type: sendType
     }
 
     const promise = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', messageObject);
-    promise.then(getMessages);
+    document.querySelector('footer textarea').value = '';
+    promise.then(getMessages);    
 }
 
 document.querySelector('.enter-screen button').addEventListener('click', getUsername);
