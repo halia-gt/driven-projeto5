@@ -1,10 +1,15 @@
 let serverMessages = [];
-let username;
-
+let serverUsers = [];
+let username, ul;
 
 function getMessages() {
     const promise = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
     promise.then(createArrayMessages);
+}
+
+function getUsers() {
+    const promise = axios.get('https://mock-api.driven.com.br/api/v6/uol/participants');
+    promise.then(createArrayUsers);
 }
 
 function createArrayMessages(answer) {
@@ -12,7 +17,12 @@ function createArrayMessages(answer) {
     displayMessages();
 }
 
-function displayMessages () {
+function createArrayUsers(answer) {
+    serverUsers = answer.data;
+    displayUsers();
+}
+
+function displayMessages() {
     const main = document.querySelector('main');
     main.innerHTML = '';
 
@@ -54,6 +64,21 @@ function displayMessages () {
     lastMessage.scrollIntoView();
 }
 
+function displayUsers() {
+    ul = document.querySelector('.modal .modal-content ul');
+
+    for ( let i = 0 ; i < serverUsers.length ; i++ ) {
+        const userTemplate = `
+            <li>
+                <ion-icon name="person-circle"></ion-icon>
+                <span>${serverUsers[i].name}</span>
+                <img src="./images/vector.png">
+            </li>
+        `
+        ul.innerHTML += userTemplate;
+    }
+}
+
 function getUsername() {
     username = document.querySelector('.enter-screen input').value;
 
@@ -77,6 +102,18 @@ function enterRoom() {
     enterScreen.classList.add('hidden');
     abilityClicks();
     getMessages();
+    getUsers();
+}
+
+
+function abilityClicks() {
+    const peopleIcon = document.querySelector('header ion-icon');
+    peopleIcon.addEventListener('click', openModal);
+}
+
+function openModal() {
+    const modal = document.querySelector('.modal');
+    modal.classList.remove('hidden');
 }
 
 document.querySelector('.enter-screen button').addEventListener('click', getUsername);
