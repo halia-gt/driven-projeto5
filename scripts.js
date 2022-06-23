@@ -109,6 +109,9 @@ function enterRoom() {
 function abilityClicks() {
     const peopleIcon = document.querySelector('header ion-icon');
     peopleIcon.addEventListener('click', openModal);
+
+    const planeButton = document.querySelector('footer ion-icon');
+    planeButton.addEventListener('click', sendMessage);
 }
 
 function openModal() {
@@ -146,6 +149,23 @@ function selectType() {
 function closeModal() {
     const modal = document.querySelector('.modal');
     modal.classList.add('hidden');
+}
+
+let message;
+let messageObject;
+
+function sendMessage() {
+    message = document.querySelector('footer input').value;
+
+    messageObject = {
+        from: username,
+        to: 'Todos',
+        text: message,
+        type: 'message'
+    }
+
+    const promise = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', messageObject);
+    promise.then(getMessages);
 }
 
 document.querySelector('.enter-screen button').addEventListener('click', getUsername);
