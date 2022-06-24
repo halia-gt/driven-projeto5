@@ -4,6 +4,8 @@ let username;
 let sendTo = 'Todos';
 let sendType = 'message';
 
+// Tentar manter o checkmark em quem já estava com checkmark quando recarrega os usuários. Talvez colocar o TODOS em uma div diferente tbm...
+
 function getMessages() {
     const promise = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
     promise.then(createArrayMessages);
@@ -57,7 +59,7 @@ function displayMessages() {
                 `
                 break;
         }
-        if (message.type === 'message' || message.type === 'status' || (message.type === 'private_message' && message.to === username)) {
+        if (userCanSee(message)) {
             main.innerHTML += messageTemplate;
         }
     }
@@ -66,8 +68,22 @@ function displayMessages() {
     lastMessage.scrollIntoView();
 }
 
+function userCanSee(message) {
+    if (message.type === 'message' || message.type === 'status' || (message.type === 'private_message' && message.from === username) || (message.type === 'private_message' && message.to === username) || message.to === 'Todos') {
+        return true;
+    }
+    return false;
+}
+
 function displayUsers() {
     const ul = document.querySelector('.modal .modal-content ul');
+    ul.innerHTML = `
+        <li class="user">
+            <ion-icon name="people"></ion-icon>
+            <span>Todos</span>
+            <img src="./images/vector.png" class="checkmark-green">
+        </li>
+    `;
 
     for ( let i = 0 ; i < serverUsers.length ; i++ ) {
         const userTemplate = `
@@ -79,6 +95,7 @@ function displayUsers() {
         `
         ul.innerHTML += userTemplate;
     }
+    abilityClicksModal();
 }
 
 function getUsername() {
@@ -103,10 +120,10 @@ function enterRoom() {
     const enterScreen = document.querySelector('.enter-screen');
     enterScreen.classList.add('hidden');
     abilityClicks();
-    getMessages();
+    setInterval(getMessages, 3000);
     getUsers();
+    setInterval(connectionStatus, 5000);
 }
-
 
 function abilityClicks() {
     const peopleIcon = document.querySelector('header ion-icon');
@@ -120,10 +137,7 @@ function openModal() {
     const modal = document.querySelector('.modal');
     const body = document.querySelector('body');
     modal.classList.remove('hidden');
-
-    if (!modal.classList.contains('hidden')) {
-        body.style.overflow = 'hidden';
-    }
+    body.style.overflow = 'hidden';
 
     abilityClicksModal();
 }
@@ -135,8 +149,15 @@ function abilityClicksModal() {
     const type = document.querySelectorAll('.type');
     type.forEach(user => {user.addEventListener('click', selectType)});
 
-    const modal = document.querySelector('.modal');
+    const modal = document.querySelector('.modal-opacity');
     modal.addEventListener('click', closeModal);
+}
+
+function closeModal() {
+    const modal = document.querySelector('.modal');
+    const body = document.querySelector('body');
+    modal.classList.add('hidden');
+    body.style.overflow = 'initial';
 }
 
 function selectUser() {
@@ -166,11 +187,12 @@ function selectType() {
 
 function changeTextarea() {
     const reserved = document.querySelector('.textarea-send-to p');
+    reserved.style.color = '#505050';
 
     switch (true) {
         case (sendType === 'message' && sendTo !== 'Todos'):
             reserved.innerHTML = `
-                Enviando para ${sendTo} (publicamente)
+                Enviando para ${sendTo}
             `;
             break;
         
@@ -185,20 +207,10 @@ function changeTextarea() {
     }
 }
 
-function closeModal() {
-    const modal = document.querySelector('.modal');
-    const body = document.querySelector('body');
-    modal.classList.add('hidden');
-
-    if (modal.classList.contains('hidden')) {
-        body.style.overflow = 'auto';
-    }
-}
-
 function sendMessage() {
-    let message = document.querySelector('footer textarea').value;
+    const message = document.querySelector('footer textarea').value;
 
-    let messageObject = {
+    const messageObject = {
         from: username,
         to: sendTo,
         text: message,
@@ -207,7 +219,21 @@ function sendMessage() {
 
     const promise = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', messageObject);
     document.querySelector('footer textarea').value = '';
+    promise.catch(unsendMessage);
     promise.then(getMessages);    
+}
+
+function unsendMessage(error) {
+    const reserved = document.querySelector('.textarea-send-to p');
+    reserved.style.color = 'red';
+    reserved.innerHTML = 'Mensagem não enviada';
+}
+
+function connectionStatus() {
+    axios.post('https://mock-api.driven.com.br/api/v6/uol/status', {
+        name: username
+    });
+    getUsers();
 }
 
 document.querySelector('.enter-screen button').addEventListener('click', getUsername);
