@@ -135,6 +135,14 @@ function abilityClicks() {
 
     const planeButton = document.querySelector('footer ion-icon');
     planeButton.addEventListener('click', sendMessage);
+
+    const textarea = document.querySelector('textarea');
+    textarea.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            planeButton.click();
+        }
+    });
 }
 
 function openModal() {
@@ -237,4 +245,11 @@ function connectionStatus() {
     });
 }
 
-document.querySelector('.enter-screen button').addEventListener('click', getUsername);
+const button = document.querySelector('.enter-screen button');
+button.addEventListener('click', getUsername);
+const input = document.querySelector('.enter-screen input');
+input.addEventListener('keypress', function(event) {
+    if (event.key === "Enter") {
+      button.click();
+    }
+});
