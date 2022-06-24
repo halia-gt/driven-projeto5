@@ -4,8 +4,6 @@ let username;
 let sendTo = 'Todos';
 let sendType = 'message';
 
-// Tentar manter o checkmark em quem já estava com checkmark quando recarrega os usuários. Talvez colocar o TODOS em uma div diferente tbm...
-
 function getMessages() {
     const promise = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
     promise.then(createArrayMessages);
@@ -77,22 +75,28 @@ function userCanSee(message) {
 
 function displayUsers() {
     const ul = document.querySelector('.modal .modal-content ul');
-    ul.innerHTML = `
-        <li class="user">
-            <ion-icon name="people"></ion-icon>
-            <span>Todos</span>
-            <img src="./images/vector.png" class="checkmark-green">
-        </li>
-    `;
+    ul.innerHTML = '';
 
     for ( let i = 0 ; i < serverUsers.length ; i++ ) {
-        const userTemplate = `
-            <li class="user">
-                <ion-icon name="person-circle"></ion-icon>
-                <span>${serverUsers[i].name}</span>
-                <img src="./images/vector.png">
-            </li>
-        `
+        let userTemplate;
+        if (sendTo === serverUsers[i].name) {
+            userTemplate = `
+                <li class="user">
+                    <ion-icon name="person-circle"></ion-icon>
+                    <span>${serverUsers[i].name}</span>
+                    <img src="./images/vector.png" class="checkmark-green">
+                </li>
+            `
+        } else {
+            userTemplate = `
+                <li class="user">
+                    <ion-icon name="person-circle"></ion-icon>
+                    <span>${serverUsers[i].name}</span>
+                    <img src="./images/vector.png">
+                </li>
+            `
+        }
+
         ul.innerHTML += userTemplate;
     }
     abilityClicksModal();
@@ -121,8 +125,8 @@ function enterRoom() {
     enterScreen.classList.add('hidden');
     abilityClicks();
     setInterval(getMessages, 3000);
-    getUsers();
-    setInterval(connectionStatus, 5000);
+    setInterval(getUsers, 10000);
+    setInterval(connectionStatus, 4000);
 }
 
 function abilityClicks() {
@@ -219,21 +223,18 @@ function sendMessage() {
 
     const promise = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', messageObject);
     document.querySelector('footer textarea').value = '';
-    promise.catch(unsendMessage);
+    promise.catch(reloadPage);
     promise.then(getMessages);    
 }
 
-function unsendMessage(error) {
-    const reserved = document.querySelector('.textarea-send-to p');
-    reserved.style.color = 'red';
-    reserved.innerHTML = 'Mensagem não enviada';
+function reloadPage(error) {
+    window.location.reload();
 }
 
 function connectionStatus() {
     axios.post('https://mock-api.driven.com.br/api/v6/uol/status', {
         name: username
     });
-    getUsers();
 }
 
 document.querySelector('.enter-screen button').addEventListener('click', getUsername);

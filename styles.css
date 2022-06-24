@@ -210,33 +210,33 @@ footer .textarea-send-to p {
     padding: 25px 35px;
 }
 
-.modal-content ul {
+.modal-content ul, .all {
     padding-left: 20px;
     padding-right: 20px;
 }
 
-.modal-content ul li {
+.modal-content ul li, .all {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
 }
 
-.modal-content ul li span {
+.modal-content ul li span, .all span {
     margin-left: 10px;
     flex-grow: 1;
 }
 
-.modal-content ul li ion-icon {
+.modal-content ul li ion-icon, .all ion-icon {
     font-size: 22px;
 }
 
-.modal-content ul li img {
-    width: 9px;
+.modal-content ul li img, .all img {
+    width: 12px;
     opacity: 0;
 }
 
-.modal-content ul li img.checkmark-green {
+.modal-content ul li img.checkmark-green, .all img.checkmark-green {
     opacity: 1;
 }
 
