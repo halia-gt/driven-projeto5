@@ -62,6 +62,7 @@ function displayMessages() {
         }
     }
 
+    enterRoom();
     lastMessage = document.querySelector('.message-container:last-child');
     lastMessage.scrollIntoView();
 }
@@ -71,6 +72,13 @@ function userCanSee(message) {
         return true;
     }
     return false;
+}
+
+function enterRoom() {
+    const enterScreen = document.querySelector('.enter-screen');
+    if (!enterScreen.classList.contains('hidden')) {
+        enterScreen.classList.add('hidden');
+    }
 }
 
 function displayUsers() {
@@ -111,7 +119,7 @@ function getUsername() {
 
     const promise = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants', userObjetct);
     promise.catch(wrongUsername);
-    promise.then(enterRoom);
+    promise.then(loading);
     
 }
 
@@ -120,9 +128,12 @@ function wrongUsername(error) {
     errorMessage.innerHTML = 'Usuário inválido, digite outro nome.';
 }
 
-function enterRoom() {
-    const enterScreen = document.querySelector('.enter-screen');
-    enterScreen.classList.add('hidden');
+function loading() {
+    const inputArea = document.querySelector('.enter-screen-input');
+    inputArea.classList.add('hidden');
+    const loading = document.querySelector('.enter-screen-loading');
+    loading.classList.remove('hidden');
+
     abilityClicks();
     setInterval(getMessages, 3000);
     setInterval(getUsers, 10000);

@@ -127,13 +127,18 @@ footer .textarea-send-to p {
     width: 100%;
     height: 100%;
     background-color: #FFFFFF;
+
+}
+
+.enter-screen, .enter-screen-input, .enter-screen-loading {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .enter-screen img {
-    width: 130px;
+    width: 150px;
     margin-top: 15vh;
     margin-bottom: 15vh;
 }
@@ -180,6 +185,11 @@ footer .textarea-send-to p {
     margin-top: 15px;
 }
 
+.enter-screen-loading p {
+    color: #000000;
+    font-size: 18px;
+}
+
 /* ---------------------------------------------------------- TENTAR FAZER TRANSIÇÃO DA DIREITA PRA ESQUERDA ---------------------------------------------------------- */
 .modal {
     position: fixed;
@@ -198,7 +208,6 @@ footer .textarea-send-to p {
 }
 
 .modal-content {
-    width: 67%;
     height: 100%;
     background-color: #FFFFFF;
     font-size: 16px;
@@ -225,6 +234,7 @@ footer .textarea-send-to p {
 .modal-content ul li span, .all span {
     margin-left: 10px;
     flex-grow: 1;
+    line-break: anywhere;
 }
 
 .modal-content ul li ion-icon, .all ion-icon {
@@ -244,3 +254,64 @@ footer .textarea-send-to p {
     display: none;
 }
 
+.enter-screen-loading .loader {
+    color: #000000;
+    font-size: 12px;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    position: relative;
+    text-indent: -9999em;
+    animation: mulShdSpin 1.3s infinite linear;
+    transform: translateZ(0);
+    margin-bottom: 50px;
+}
+
+@keyframes mulShdSpin {
+    0%,
+    100% {
+        box-shadow: 0 -3em 0 0.2em, 
+        2em -2em 0 0em, 3em 0 0 -1em, 
+        2em 2em 0 -1em, 0 3em 0 -1em, 
+        -2em 2em 0 -1em, -3em 0 0 -1em, 
+        -2em -2em 0 0;
+    }
+    12.5% {
+        box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 
+        3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, 
+        -2em 2em 0 -1em, -3em 0 0 -1em, 
+        -2em -2em 0 -1em;
+    }
+    25% {
+        box-shadow: 0 -3em 0 -0.5em, 
+        2em -2em 0 0, 3em 0 0 0.2em, 
+        2em 2em 0 0, 0 3em 0 -1em, 
+        -2em 2em 0 -1em, -3em 0 0 -1em, 
+        -2em -2em 0 -1em;
+    }
+    37.5% {
+        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em,
+        3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, 
+        -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
+    }
+    50% {
+        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em,
+        3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, 
+        -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
+    }
+    62.5% {
+        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em,
+        3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, 
+        -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
+    }
+    75% {
+        box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 
+        3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, 
+        -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
+    }
+    87.5% {
+        box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 
+        3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, 
+        -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
+    }
+}
