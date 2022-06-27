@@ -251,9 +251,10 @@ function reloadPage(error) {
 }
 
 function connectionStatus() {
-    axios.post('https://mock-api.driven.com.br/api/v6/uol/status', {
+    const promise = axios.post('https://mock-api.driven.com.br/api/v6/uol/status', {
         name: username
     });
+    promise.catch(reloadPage);
 }
 
 const button = document.querySelector('.enter-screen button');
