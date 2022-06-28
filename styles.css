@@ -218,6 +218,7 @@ footer .textarea-send-to p {
 
 .modal-content {
     height: 100%;
+    width: 67%;
     background-color: #FFFFFF;
     font-size: 16px;
     overflow: auto;
